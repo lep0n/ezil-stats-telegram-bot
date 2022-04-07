@@ -1,6 +1,6 @@
 # 🤖 Ezil Stats telegram bot
 
-Telegram bot for tracking stats on ezil.me mining pool.
+Telegram bot for tracking personal stats on ezil.me mining pool
 
 ## ⚙ Configuration
 
