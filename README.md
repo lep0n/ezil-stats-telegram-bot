@@ -11,9 +11,9 @@ In the environment variables, you need to put the bot's API token
 Usage with Docker is shown below. Fill in the ENV variables in the Dockerfile
 
 ```
-docker build -t ezil-stats-telegram-bot ./
+docker build -t ezil-stats ./
 
-docker run -d --name bot -v /home/ezil-stats-telegram-bot/db:/home/db ezil_stats
+docker run -d --name bot -v /home/ezil-stats-telegram-bot/db:/home/db ezil-stats
 ```
 
 To enter a working container:
