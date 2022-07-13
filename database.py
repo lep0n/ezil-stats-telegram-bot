@@ -1,19 +1,20 @@
 import sqlite3
+import os
 
 
-conn = sqlite3.connect("database.db", check_same_thread=False)
+conn = sqlite3.connect(os.path.join("db", "database.db"), check_same_thread=False)
 cursor = conn.cursor()
 
 
 def insert(table: str, column_values: dict) -> None:
     """Insert new row in table"""
 
-    columns = ", ".join( column_values.keys() )
+    columns = ", ".join(column_values.keys())
     values = [tuple(column_values.values())]
-    placeholders = ", ".join( "?" * len(column_values.keys()) )
+    placeholders = ", ".join("?" * len(column_values.keys()))
 
-    cursor.executemany(f"INSERT INTO {table} ({columns}) VALUES ({placeholders})",
-        values
+    cursor.executemany(
+        f"INSERT INTO {table} ({columns}) VALUES ({placeholders})", values
     )
     conn.commit()
 
@@ -21,8 +22,12 @@ def insert(table: str, column_values: dict) -> None:
 def update(table: str, user_id: int, column_values: dict) -> None:
     """Update row values in table"""
 
-    values = ", ".join(["=".join(tuple(map(lambda v: f"'{v}'", value))) \
-        for value in column_values.items()])
+    values = ", ".join(
+        [
+            "=".join(tuple(map(lambda v: f"'{v}'", value)))
+            for value in column_values.items()
+        ]
+    )
     cursor.execute(f"UPDATE {table} SET {values} WHERE {user_id=}")
     conn.commit()
 
@@ -57,6 +62,28 @@ def fetchone(table: str, user_id: int, column: str) -> str:
 
 def delete(table: str, user_id: int) -> None:
     """Delete row from table"""
-    
+
     cursor.execute(f"DELETE FROM {table} WHERE {user_id=}")
     conn.commit()
+
+
+def _init_db():
+    """Init DB"""
+    with open("createdb.sql", "r") as f:
+        sql = f.read()
+    cursor.executescript(sql)
+    conn.commit()
+
+
+def check_db_exists():
+    """Checks if the database is initialized, if not, initializes"""
+    cursor.execute(
+        "SELECT name FROM sqlite_master " "WHERE type='table' AND name='users'"
+    )
+    table_exists = cursor.fetchall()
+    if table_exists:
+        return
+    _init_db()
+
+
+check_db_exists()

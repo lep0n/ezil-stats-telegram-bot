@@ -13,7 +13,6 @@ COPY Pipfile ./
 COPY Pipfile.lock ./
 
 RUN pip install -U pip pipenv && apt update && apt install sqlite3
-RUN sqlite3 database.db < createdb.sql
 RUN pipenv install --deploy --ignore-pipfile
 
 CMD ["pipenv", "run", "python", "app.py"]

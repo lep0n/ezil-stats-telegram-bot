@@ -13,7 +13,7 @@ Usage with Docker is shown below. Fill in the ENV variables in the Dockerfile
 ```
 docker build -t ezil_stats ./
 
-docker run -d --name bot ezil_stats
+docker run -d --name bot -v /home/ezil-stats-telegram-bot/db:/home/db ezil_stats
 ```
 
 To enter a working container:
